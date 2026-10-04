@@ -1,3 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
+import { getHerPatternStatus } from "@/lib/herpattern.functions";
 import { Check, Cloud, Loader2, Smartphone, Watch, X } from "lucide-react";
 import type { Connectivity, DemoEngine } from "@/hooks/useDemoEngine";
 import { Button } from "@/components/ui/button";
@@ -12,6 +14,7 @@ export function ConnectivityPanel({ e }: { e: DemoEngine }) {
   const cloudDown = c === "offline" || c === "weak";
   const waiting = e.queue.filter((q) => q.state === "QUEUED" || q.state === "FAILED").length;
   const failed = e.queue.some((q) => q.state === "FAILED");
+  const status = useQuery({ queryKey: ["hp-status"], queryFn: () => getHerPatternStatus(), staleTime: 60_000, retry: false });
   const allSynced = e.queue.length > 0 && e.queue.every((q) => q.state === "SYNCED");
 
   return (
@@ -35,6 +38,11 @@ export function ConnectivityPanel({ e }: { e: DemoEngine }) {
         </>}
         {(c === "offline" || c === "weak") && <Button size="sm" onClick={() => void e.restoreConnection()} disabled={e.judge}>Restore connection</Button>}
         {failed && c !== "restoring" && <Button size="sm" variant="outline" onClick={() => void e.retryFailed()}>Retry sync</Button>}
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2 font-mono text-[0.65rem] uppercase tracking-wider">
+        <ApiBadge label="HerPattern API" s={status.data?.herpattern} />
+        <ApiBadge label="Small AI service" s={status.data?.smallAi} />
       </div>
 
       {/* Queue */}
@@ -79,4 +87,10 @@ function Link({ ok, pending }: { ok: boolean; pending?: boolean }) {
       {!ok && !pending && <X className="absolute left-1/2 size-4 -translate-x-1/2 text-destructive" />}
     </div>
   );
+}
+
+function ApiBadge({ label, s }: { label: string; s: "connected" | "unreachable" | "not_configured" | undefined }) {
+  const text = s === "connected" ? "Connected · secure" : s === "unreachable" ? "Unreachable" : s === "not_configured" ? "Not configured" : "Checking…";
+  const color = s === "connected" ? "text-ok" : s === "unreachable" ? "text-destructive" : "text-muted-foreground";
+  return <div className="rounded border px-2 py-1.5"><div className="text-muted-foreground">{label}</div><div className={color}>{text}</div></div>;
 }

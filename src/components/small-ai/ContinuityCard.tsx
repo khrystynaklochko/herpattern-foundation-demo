@@ -14,10 +14,10 @@ export function ContinuityCard({ e }: { e: DemoEngine }) {
   const pain = c.answer ? `${c.answer} today` : "Not reported";
 
   const exportSummary = () => {
-    const blob = new Blob([JSON.stringify({ synthetic: true, createdAt: c.createdAt, measured: m, answer: c.answer, recovery: c.recovery, confidence: c.confidence }, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify({ createdAt: c.createdAt, measured: m, answer: c.answer, recovery: c.recovery, confidence: c.confidence }, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "herpattern-demo-continuity-summary.json";
+    a.download = "herpattern-continuity-summary.json";
     a.click();
     URL.revokeObjectURL(a.href);
   };
@@ -52,13 +52,13 @@ export function ContinuityCard({ e }: { e: DemoEngine }) {
       <div className="mt-4 flex flex-wrap gap-2">
         <Button size="sm" variant="outline" onClick={() => setView("evidence")}>View evidence</Button>
         <Button size="sm" variant="outline" onClick={() => setView("timeline")}>View timeline</Button>
-        <Button size="sm" variant="ghost" onClick={exportSummary}>Export demo summary</Button>
+        <Button size="sm" variant="ghost" onClick={exportSummary}>Export summary</Button>
       </div>
       <p className="mt-3 border-t pt-3 text-xs text-muted-foreground">HerPattern organizes personal health context. It does not diagnose or prescribe.</p>
 
       <Dialog open={view !== null} onOpenChange={(o) => !o && setView(null)}>
         <DialogContent className="max-h-[80vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>{view === "evidence" ? "Evidence (synthetic)" : "Timeline"}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle>{view === "evidence" ? "Evidence" : "Timeline"}</DialogTitle></DialogHeader>
           {view === "evidence" ? (
             <ul className="space-y-1 font-mono text-xs">
               {c.frame.points.map((p) => (

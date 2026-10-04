@@ -25,7 +25,7 @@ export function SafetyPanel({ open, onOpenChange }: { open: boolean; onOpenChang
       <DialogContent className="sm:max-w-xl">
         <DialogHeader><DialogTitle className="font-serif text-3xl font-normal">Safety &amp; scope</DialogTitle></DialogHeader>
         <SafetyContent />
-        <p className="text-xs text-muted-foreground">HerPattern organizes personal health context. It does not diagnose or prescribe. All data on this page is synthetic.</p>
+        <p className="text-xs text-muted-foreground">HerPattern organizes personal health context. It does not diagnose or prescribe.</p>
       </DialogContent>
     </Dialog>
   );

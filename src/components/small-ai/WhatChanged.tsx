@@ -6,11 +6,11 @@ import { Panel, ProvenancePopover, fmtSleep, signed, type Provenance } from "./p
 export function describeFeature(f: FeatureKey, e: DemoEngine): { text: string; p: Provenance } {
   const m = e.frame.measured;
   const ts = e.frame.timestamp;
-  const base = { timestamp: ts, kind: "measured" as const, source: "Synthetic watch" };
+  const base = { timestamp: ts, kind: "measured" as const, source: "Watch" };
   switch (f) {
     case "sleep_debt": {
       const d = m.sleepDeltaMin;
-      return { text: Math.abs(d) < 15 ? "similar to normal" : `${fmtSleep(d)} ${d < 0 ? "below" : "above"} baseline`, p: { ...base, label: "Sleep", value: fmtSleep(m.sleepMin), baseline: fmtSleep(BASELINE.sleepMin), deviation: signed(d, " min"), source: "Synthetic sleep tracker" } };
+      return { text: Math.abs(d) < 15 ? "similar to normal" : `${fmtSleep(d)} ${d < 0 ? "below" : "above"} baseline`, p: { ...base, label: "Sleep", value: fmtSleep(m.sleepMin), baseline: fmtSleep(BASELINE.sleepMin), deviation: signed(d, " min"), source: "Sleep tracker" } };
     }
     case "hrv_delta": {
       const pct = Math.round(((m.hrv - BASELINE.hrv) / BASELINE.hrv) * 100);
@@ -27,7 +27,7 @@ export function describeFeature(f: FeatureKey, e: DemoEngine): { text: string; p
     case "resp_delta":
       return { text: Math.abs(m.resp - BASELINE.resp) < 0.2 ? "similar to normal" : `${signed(Math.round((m.resp - BASELINE.resp) * 10) / 10)} breaths/min`, p: { ...base, label: "Respiration", value: `${m.resp} /min`, baseline: `${BASELINE.resp} /min`, deviation: signed(Math.round((m.resp - BASELINE.resp) * 10) / 10) } };
     case "sleep_fragmentation":
-      return { text: m.fragmentation < 0.3 ? "similar to normal" : "elevated", p: { ...base, label: "Sleep fragmentation", value: `${m.fragmentation} σ`, baseline: "0 σ", deviation: signed(m.fragmentation, " σ"), source: "Synthetic sleep tracker" } };
+      return { text: m.fragmentation < 0.3 ? "similar to normal" : "elevated", p: { ...base, label: "Sleep fragmentation", value: `${m.fragmentation} σ`, baseline: "0 σ", deviation: signed(m.fragmentation, " σ"), source: "Sleep tracker" } };
   }
 }
 

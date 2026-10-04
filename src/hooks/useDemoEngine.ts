@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FRAME_COUNT, getScenario, hrSample, type ScenarioFrame } from "@/data/small-ai/demoScenario";
 import { inferLocal } from "@/lib/small-ai/localSmallAI";
 import { smallAi, type InferResult } from "@/lib/small-ai/smallAiApi";
-import { getHerPatternApi } from "@/lib/small-ai/herPatternApi";
+import { syncEvent } from "@/lib/small-ai/herPatternApi";
 import { loadQueue, saveQueue, type QueuedEvent, type QueuedEventType } from "@/lib/small-ai/queue";
 import type { FeatureKey, SmallAIInput } from "@/lib/small-ai/types";
 
@@ -103,7 +103,7 @@ export function useDemoEngine({ judge, scenarioParam }: { judge: boolean; scenar
     attempts.current[e.id] = (attempts.current[e.id] ?? 0) + 1;
     const failFirst = connRef.current === "weak" && attempts.current[e.id] === 1;
     try {
-      await getHerPatternApi({ realMode: false }).syncEvent(e, { failFirst });
+      await syncEvent(e, { failFirst });
       if (rid === runId.current) patchEvent(e.id, "SYNCED");
       return true;
     } catch {

@@ -1,23 +1,6 @@
+import { remoteInfer } from "@/lib/herpattern.functions";
 import { LocalSmallAIProvider } from "./localSmallAI";
-import type { InferenceLocation, SmallAIInference, SmallAIInput, SmallAIProvider } from "./types";
-
-const TIMEOUT_MS = 2500;
-const baseUrl = (): string | undefined =>
-  (import.meta.env['VITE_SMALL_AI_API_URL'] as string | undefined) || undefined;
-
-async function fetchJson(path: string, init?: RequestInit): Promise<unknown> {
-  const url = baseUrl();
-  if (!url) throw new Error("Small AI API not configured");
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-  try {
-    const res = await fetch(url.replace(/\/$/, "") + path, { ...init, signal: ctrl.signal });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  } finally {
-    clearTimeout(t);
-  }
-}
+import type { InferenceLocation, SmallAIInference, SmallAIInput } from "./types";
 
 const STATES = ["within_personal_pattern", "changed", "strongly_changed", "insufficient_data"];
 
@@ -36,40 +19,27 @@ function isInference(v: unknown): v is SmallAIInference {
   );
 }
 
-export class RemoteSmallAIProvider implements SmallAIProvider {
-  async infer(input: SmallAIInput) {
-    const data = await fetchJson("/infer", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(input),
-    });
-    if (!isInference(data)) throw new Error("Malformed inference response");
-    return data;
-  }
-}
-
 const local = new LocalSmallAIProvider();
-const remote = new RemoteSmallAIProvider();
+let remoteConfigured: boolean | null = null; // learned from the first server response
 
 export type InferResult = { inference: SmallAIInference; location: InferenceLocation; fallback: boolean };
 
-/** Single entry point for UI. Falls back to local browser inference on any failure. */
+/** Single entry point for UI. Remote calls go through a secured server function; any failure falls back to local. */
 export const smallAi = {
-  isRemoteConfigured: () => Boolean(baseUrl()),
-  async health(): Promise<{ ok: boolean; model?: string | undefined; version?: string | undefined }> {
-    try {
-      const d = (await fetchJson("/health")) as { ok?: boolean; model?: string; version?: string };
-      return { ok: Boolean(d?.ok), model: d?.model, version: d?.version };
-    } catch {
-      return { ok: false };
-    }
-  },
   async infer(input: SmallAIInput, opts: { forceLocal?: boolean } = {}): Promise<InferResult> {
-    if (opts.forceLocal || !baseUrl()) {
+    if (opts.forceLocal || remoteConfigured === false) {
       return { inference: await local.infer(input), location: "local", fallback: false };
     }
     try {
-      return { inference: await remote.infer(input), location: "remote", fallback: false };
+      const res = await remoteInfer({ data: input });
+      if (!res.configured) {
+        remoteConfigured = false;
+        return { inference: await local.infer(input), location: "local", fallback: false };
+      }
+      remoteConfigured = true;
+      const parsed: unknown = res.result ? JSON.parse(res.result) : null;
+      if (!isInference(parsed)) throw new Error("Malformed inference response");
+      return { inference: parsed, location: "remote", fallback: false };
     } catch {
       return { inference: await local.infer(input), location: "local", fallback: true };
     }
