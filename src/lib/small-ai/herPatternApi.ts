@@ -33,7 +33,7 @@ class RealHerPatternApi implements HerPatternApi {
 }
 
 export function getHerPatternApi(opts: { realMode: boolean }): HerPatternApi {
-  const url = import.meta.env.VITE_HERPATTERN_API_URL as string | undefined;
+  const url = import.meta.env['VITE_HERPATTERN_API_URL'] as string | undefined;
   return opts.realMode && url ? new RealHerPatternApi(url) : new DemoHerPatternApi();
 }
 

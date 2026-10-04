@@ -3,7 +3,7 @@ import type { InferenceLocation, SmallAIInference, SmallAIInput, SmallAIProvider
 
 const TIMEOUT_MS = 2500;
 const baseUrl = (): string | undefined =>
-  (import.meta.env.VITE_SMALL_AI_API_URL as string | undefined) || undefined;
+  (import.meta.env['VITE_SMALL_AI_API_URL'] as string | undefined) || undefined;
 
 async function fetchJson(path: string, init?: RequestInit): Promise<unknown> {
   const url = baseUrl();
@@ -23,7 +23,7 @@ const STATES = ["within_personal_pattern", "changed", "strongly_changed", "insuf
 
 function isInference(v: unknown): v is SmallAIInference {
   if (!v || typeof v !== "object") return false;
-  const o = v as Record<string, unknown>;
+  const o = v as Partial<Record<keyof SmallAIInference, unknown>>;
   return (
     typeof o.state === "string" && STATES.includes(o.state) &&
     typeof o.anomaly_score === "number" &&
