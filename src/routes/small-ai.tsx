@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Pause, Play, RotateCcw, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -51,6 +51,12 @@ function SmallAIPage() {
   const [safety, setSafety] = useState(false);
   const progress = ((e.frameIndex - e.startAt) / (e.frames.length - 1 - e.startAt)) * 100;
 
+  // Demo plays automatically for the viewer — no run button.
+  useEffect(() => {
+    if (!e.started) e.start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -72,16 +78,13 @@ function SmallAIPage() {
       <main className="mx-auto max-w-7xl px-4 py-5">
         {/* Control strip */}
         <div className="mb-5 flex flex-wrap items-center gap-3">
-          {!e.started || e.phase === "complete" ? (
-            <Button size="lg" onClick={e.start} className="font-mono tracking-wider">
-              <Play className="size-4" />{judge ? "START 25-SECOND DEMO" : e.started ? "RUN AGAIN" : "RUN DEMO"}
-            </Button>
-          ) : e.running ? (
-            <Button size="lg" variant="secondary" onClick={e.pause}><Pause className="size-4" />Pause</Button>
-          ) : (
-            <Button size="lg" variant="secondary" onClick={e.resume} disabled={e.phase === "question_required" || e.frameIndex >= e.frames.length - 1}><Play className="size-4" />Resume</Button>
-          )}
-          {e.started && <Button size="lg" variant="ghost" onClick={e.reset}><RotateCcw className="size-4" />Restart</Button>}
+          {e.phase !== "complete" &&
+            (e.running ? (
+              <Button size="lg" variant="secondary" onClick={e.pause}><Pause className="size-4" />Pause</Button>
+            ) : (
+              <Button size="lg" variant="secondary" onClick={e.resume} disabled={e.phase === "question_required" || e.frameIndex >= e.frames.length - 1}><Play className="size-4" />Resume</Button>
+            ))}
+          {e.started && <Button size="lg" variant="ghost" onClick={e.start}><RotateCcw className="size-4" />Restart</Button>}
           <div className="flex items-center gap-2 rounded-full border px-3 py-1.5">
             <span className={`size-2 rounded-full ${e.running ? "bg-primary animate-pulse-dot" : "bg-muted-foreground"}`} />
             <span className="font-mono text-xs uppercase tracking-wider">{PHASE_LABEL[e.phase]}</span>
