@@ -49,8 +49,8 @@ export function inferLocal(input: SmallAIInput): SmallAIInference {
   const m = MODEL;
   const missing = m.feature_order.filter((f) => input.values[f] == null);
 
-  const x = m.feature_order.map((f, i) => (input.values[f] == null ? m.mean[i] : Number(input.values[f])));
-  const z = x.map((v, i) => (v - m.mean[i]) / Math.max(1e-8, m.std[i]));
+  const x = m.feature_order.map((f, i) => (input.values[f] == null ? (m.mean[i] ?? 0) : Number(input.values[f])));
+  const z = x.map((v, i) => (v - (m.mean[i] ?? 0)) / Math.max(1e-8, m.std[i] ?? 1));
 
   // PCA projection + reconstruction.
   const latent = m.components.map((row) => dot(row, z));
