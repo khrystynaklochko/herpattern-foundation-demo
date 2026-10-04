@@ -37,8 +37,9 @@ export const smallAi = {
         return { inference: await local.infer(input), location: "local", fallback: false };
       }
       remoteConfigured = true;
-      if (!isInference(res.result)) throw new Error("Malformed inference response");
-      return { inference: res.result, location: "remote", fallback: false };
+      const parsed: unknown = res.result ? JSON.parse(res.result) : null;
+      if (!isInference(parsed)) throw new Error("Malformed inference response");
+      return { inference: parsed, location: "remote", fallback: false };
     } catch {
       return { inference: await local.infer(input), location: "local", fallback: true };
     }

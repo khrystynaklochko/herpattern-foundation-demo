@@ -91,5 +91,5 @@ export const remoteInfer = createServerFn({ method: "POST" })
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error(`Small AI service error ${res.status}`);
-    return { configured: true as const, result: (await res.json()) as unknown };
+    return { configured: true as const, result: await res.text() };
   });
