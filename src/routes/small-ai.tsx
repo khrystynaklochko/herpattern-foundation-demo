@@ -10,6 +10,7 @@ import { RecoveryState } from "@/components/small-ai/RecoveryState";
 import { WhatChanged } from "@/components/small-ai/WhatChanged";
 import { QuestionCard } from "@/components/small-ai/QuestionCard";
 import { ContinuityCard } from "@/components/small-ai/ContinuityCard";
+import { DeviceSkins } from "@/components/small-ai/DeviceSkins";
 import { ConnectivityPanel } from "@/components/small-ai/ConnectivityPanel";
 import { WhyDrawer } from "@/components/small-ai/WhyDrawer";
 import { SafetyContent, SafetyPanel } from "@/components/small-ai/SafetyPanel";
@@ -122,6 +123,7 @@ function SmallAIPage() {
             </div>
           </div>
           <div className="space-y-4 lg:col-span-5">
+            <DeviceSkins e={e} />
             <ConnectivityPanel e={e} />
             <BaselineMap e={e} />
             <CardiacPanel e={e} />
