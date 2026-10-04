@@ -64,18 +64,19 @@ export function inferLocal(input: SmallAIInput): SmallAIInference {
   const anomaly = clip(0.25 * reconSignal + 0.75 * distanceSignal, 0, 1);
 
   const idx = Object.fromEntries(m.feature_order.map((f, i) => [f, i])) as Record<FeatureKey, number>;
+  const zOf = (f: FeatureKey) => z[idx[f] ?? 0] ?? 0;
   const c: Partial<Record<FeatureKey, number>> = {};
   const add = (f: FeatureKey, amount: number) => {
     c[f] = Math.max(0, amount) * (m.recovery_weights[f] ?? 1);
   };
 
-  add("hrv_delta", -z[idx.hrv_delta]);
-  add("rhr_delta", z[idx.rhr_delta]);
-  add("sleep_debt", z[idx.sleep_debt]);
-  add("sleep_fragmentation", z[idx.sleep_fragmentation]);
-  add("activity_load", Math.abs(z[idx.activity_load]) * 0.5);
-  add("temp_delta", Math.abs(z[idx.temp_delta]));
-  add("resp_delta", Math.abs(z[idx.resp_delta]));
+  add("hrv_delta", -zOf("hrv_delta"));
+  add("rhr_delta", zOf("rhr_delta"));
+  add("sleep_debt", zOf("sleep_debt"));
+  add("sleep_fragmentation", zOf("sleep_fragmentation"));
+  add("activity_load", Math.abs(zOf("activity_load")) * 0.5);
+  add("temp_delta", Math.abs(zOf("temp_delta")));
+  add("resp_delta", Math.abs(zOf("resp_delta")));
 
   const rawStress = Object.values(c).reduce((a, b) => a + b, 0);
   const stress = 100 * (1 - Math.exp(-rawStress / 5));
