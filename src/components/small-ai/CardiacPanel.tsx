@@ -7,7 +7,7 @@ export function CardiacPanel({ e }: { e: DemoEngine }) {
   const m = e.frame.measured;
   const inf = e.result?.inference;
   const insufficient = inf?.state === "insufficient_data";
-  const hrNow = Math.round(e.hr[e.hr.length - 1]);
+  const hrNow = Math.round(e.hr[e.hr.length - 1]!);
   const ts = e.frame.timestamp;
   const src = "Synthetic watch";
   const hrvPct = Math.round(((m.hrv - BASELINE.hrv) / BASELINE.hrv) * 100);

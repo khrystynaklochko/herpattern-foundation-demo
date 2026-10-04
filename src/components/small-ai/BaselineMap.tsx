@@ -7,7 +7,7 @@ const CX = 130, CY = 110;
 const CLUSTER = Array.from({ length: N }, (_, k) => {
   const r = Math.sqrt((k + 0.5) / N) * R * 0.92;
   const a = k * 2.399963;
-  return { x: CX + r * Math.cos(a), y: CY + r * Math.sin(a) * 0.8 };
+  return { x: Math.round((CX + r * Math.cos(a)) * 100) / 100, y: Math.round((CY + r * Math.sin(a) * 0.8) * 100) / 100 };
 });
 
 export function BaselineMap({ e }: { e: DemoEngine }) {

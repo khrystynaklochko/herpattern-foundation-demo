@@ -5,7 +5,7 @@ import { Panel, KindTag } from "./primitives";
 
 export function LiveHeartRate({ e }: { e: DemoEngine }) {
   const { hr, running, frame } = e;
-  const current = Math.round(hr[hr.length - 1]);
+  const current = Math.round(hr[hr.length - 1]!);
   const W = 600, H = 150;
   const path = useMemo(() => {
     const lo = 60, hi = 95;

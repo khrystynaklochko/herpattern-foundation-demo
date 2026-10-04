@@ -50,7 +50,7 @@ export function useDemoEngine({ judge, scenarioParam }: { judge: boolean; scenar
   const [running, setRunning] = useState(false);
   const [started, setStarted] = useState(false);
   const [speed, setSpeed] = useState<Speed>(4);
-  const [hr, setHr] = useState<number[]>(() => initialHr(frames[startAt]));
+  const [hr, setHr] = useState<number[]>(() => initialHr(frames[startAt]!));
   const [result, setResult] = useState<InferResult | null>(null);
   const [phase, setPhase] = useState<DemoPhase>("idle");
   const [answer, setAnswer] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export function useDemoEngine({ judge, scenarioParam }: { judge: boolean; scenar
   const [finale, setFinale] = useState(false);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
 
-  const frame = frames[frameIndex];
+  const frame = frames[frameIndex]!;
   const frameRef = useRef(frame);
   frameRef.current = frame;
   const connRef = useRef(connectivity);
@@ -265,7 +265,7 @@ export function useDemoEngine({ judge, scenarioParam }: { judge: boolean; scenar
     setRunning(false);
     setStarted(false);
     setFrameIndex(startAt);
-    setHr(initialHr(frames[startAt]));
+    setHr(initialHr(frames[startAt]!));
     setPhase("idle");
     setAnswer(null);
     setContinuity(null);
@@ -287,7 +287,7 @@ export function useDemoEngine({ judge, scenarioParam }: { judge: boolean; scenar
 
   const velocity = useMemo(() => {
     if (!result || result.inference.state === "insufficient_data") return 0;
-    const prev = inferLocal(buildInput(frames[Math.max(0, frameIndex - 24)], false, "known"));
+    const prev = inferLocal(buildInput(frames[Math.max(0, frameIndex - 24)]!, false, "known"));
     return Math.round(((result.inference.recovery_score - prev.recovery_score) / prev.recovery_score) * 100);
   }, [result, frames, frameIndex]);
 

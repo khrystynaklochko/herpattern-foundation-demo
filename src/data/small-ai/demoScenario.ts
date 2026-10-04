@@ -58,7 +58,7 @@ const START = Date.UTC(2026, 2, 12, 15, 0, 0);
 
 function interp(i: number): Key {
   for (let n = 0; n < KEYFRAMES.length - 1; n++) {
-    const a = KEYFRAMES[n], b = KEYFRAMES[n + 1];
+    const a = KEYFRAMES[n]!, b = KEYFRAMES[n + 1]!;
     if (i >= a.i && i <= b.i) {
       const t = (i - a.i) / (b.i - a.i);
       const out = {} as Key;
@@ -66,7 +66,7 @@ function interp(i: number): Key {
       return out;
     }
   }
-  return KEYFRAMES[KEYFRAMES.length - 1].k;
+  return KEYFRAMES[KEYFRAMES.length - 1]!.k;
 }
 
 function segmentFor(i: number) {
