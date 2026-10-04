@@ -62,7 +62,6 @@ export function ProvenancePopover({ p, children, className }: { p: Provenance; c
           <dt className="text-muted-foreground">Source</dt><dd>{p.source}</dd>
           <dt className="text-muted-foreground">Timestamp</dt><dd className="font-mono text-xs">{fmtTime(p.timestamp)}</dd>
         </dl>
-        <p className="mt-3 label-mono">Synthetic demonstration data</p>
       </PopoverContent>
     </Popover>
   );

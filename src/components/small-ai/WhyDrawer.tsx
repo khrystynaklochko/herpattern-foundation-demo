@@ -32,7 +32,7 @@ export function WhyDrawer({ e, open, onOpenChange }: { e: DemoEngine; open: bool
               <dt className="text-muted-foreground">Inference</dt><dd className="font-mono">Local-capable</dd>
               <dt className="text-muted-foreground">Inference location</dt><dd className="font-mono">{r.location === "local" ? "LOCAL BROWSER" : "HERPATTERN SMALL AI SERVICE"}{r.fallback ? " (fallback)" : ""}</dd>
               <dt className="text-muted-foreground">Data coverage</dt><dd className="font-mono">{coverage}%</dd>
-              <dt className="text-muted-foreground">Input</dt><dd className="font-mono">Synthetic demonstration</dd>
+              <dt className="text-muted-foreground">Input</dt><dd className="font-mono">Wearable stream</dd>
             </dl>
             <div className="rounded-lg border p-3">
               <label className="flex items-center justify-between text-sm">Technical mode <Switch checked={tech} onCheckedChange={setTech} /></label>
