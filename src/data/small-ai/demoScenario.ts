@@ -107,7 +107,7 @@ function buildFrame(i: number, flat: boolean): ScenarioFrame {
     temp_delta: r1(k.temp / 0.25),
     resp_delta: r1(k.resp / 0.6),
   };
-  const P = (value: number, measurementType: string, source = "Synthetic watch"): DataPoint => ({
+  const P = (value: number, measurementType: string, source = "Watch"): DataPoint => ({
     timestamp: ts, value, source, measurementType, synthetic: true,
   });
   return {
@@ -121,7 +121,7 @@ function buildFrame(i: number, flat: boolean): ScenarioFrame {
       P(measured.hr, "heart_rate"),
       P(measured.rhr, "resting_heart_rate"),
       P(measured.hrv, "hrv_rmssd"),
-      P(measured.sleepMin, "sleep_duration", "Synthetic sleep tracker"),
+      P(measured.sleepMin, "sleep_duration", "Sleep tracker"),
       P(measured.tempDelta, "skin_temperature_delta"),
       P(measured.resp, "respiration_rate"),
       P(measured.activityRel, "activity_load_relative"),

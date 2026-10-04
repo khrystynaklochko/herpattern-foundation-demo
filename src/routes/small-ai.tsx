@@ -24,7 +24,7 @@ export const Route = createFileRoute("/small-ai")({
   head: () => ({
     meta: [
       { title: "HerPattern Small AI — Offline-capable personal pattern demo" },
-      { name: "description", content: "Watch HerPattern learn a personal baseline, detect change, ask one question and keep working when the cloud disappears. Synthetic demo data." },
+      { name: "description", content: "Watch HerPattern learn a personal baseline, detect change, ask one question and keep working when the cloud disappears." },
       { property: "og:title", content: "HerPattern Small AI — The cloud disappeared. The intelligence didn't." },
       { property: "og:description", content: "A 25-second interactive demo of local, explainable, personal-baseline AI for women's health continuity." },
       { property: "og:type", content: "website" },
@@ -56,7 +56,6 @@ function SmallAIPage() {
       <header className="sticky top-0 z-30 border-b bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
           <div className="font-mono text-sm tracking-[0.2em]"><span className="text-primary">HERPATTERN</span> / SMALL AI</div>
-          <span className="rounded border border-derived/40 px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-derived">Synthetic demonstration data</span>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden font-mono text-xs text-muted-foreground sm:inline">OFFLINE CAPABLE</span>
             <Button size="sm" variant="ghost" onClick={() => setSafety(true)}><ShieldCheck className="size-4" />Safety &amp; scope</Button>
@@ -134,7 +133,7 @@ function SmallAIPage() {
           <SafetyContent />
         </section>
         <footer className="py-8 text-center text-xs text-muted-foreground">
-          Synthetic demonstration data · no real health information is loaded · HerPattern organizes personal health context. It does not diagnose or prescribe.
+          HerPattern organizes personal health context. It does not diagnose or prescribe.
         </footer>
       </main>
 
