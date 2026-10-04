@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Pause, Play, RotateCcw, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -50,6 +50,12 @@ function SmallAIPage() {
   const [why, setWhy] = useState(false);
   const [safety, setSafety] = useState(false);
   const progress = ((e.frameIndex - e.startAt) / (e.frames.length - 1 - e.startAt)) * 100;
+
+  // Demo plays automatically for the viewer — no run button.
+  useEffect(() => {
+    if (!e.started) e.start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="min-h-screen">
