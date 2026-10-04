@@ -14,12 +14,12 @@ import { ConnectivityPanel } from "@/components/small-ai/ConnectivityPanel";
 import { WhyDrawer } from "@/components/small-ai/WhyDrawer";
 import { SafetyContent, SafetyPanel } from "@/components/small-ai/SafetyPanel";
 
-type Search = { demo?: "judge"; scenario?: "normal" | "changed" | "missing-data" };
+type Search = { demo?: "judge" | undefined; scenario?: "normal" | "changed" | "missing-data" | undefined };
 
 export const Route = createFileRoute("/small-ai")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    demo: s.demo === "judge" ? "judge" : undefined,
-    scenario: s.scenario === "normal" || s.scenario === "changed" || s.scenario === "missing-data" ? s.scenario : undefined,
+    demo: s["demo"] === "judge" ? "judge" : undefined,
+    scenario: s["scenario"] === "normal" || s["scenario"] === "changed" || s["scenario"] === "missing-data" ? s["scenario"] : undefined,
   }),
   head: () => ({
     meta: [

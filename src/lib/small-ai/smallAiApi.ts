@@ -56,7 +56,7 @@ export type InferResult = { inference: SmallAIInference; location: InferenceLoca
 /** Single entry point for UI. Falls back to local browser inference on any failure. */
 export const smallAi = {
   isRemoteConfigured: () => Boolean(baseUrl()),
-  async health(): Promise<{ ok: boolean; model?: string; version?: string }> {
+  async health(): Promise<{ ok: boolean; model?: string | undefined; version?: string | undefined }> {
     try {
       const d = (await fetchJson("/health")) as { ok?: boolean; model?: string; version?: string };
       return { ok: Boolean(d?.ok), model: d?.model, version: d?.version };
