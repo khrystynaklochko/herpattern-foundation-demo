@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import type { DemoEngine } from "@/hooks/useDemoEngine";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
@@ -40,7 +40,7 @@ export function WhyDrawer({ e, open, onOpenChange }: { e: DemoEngine; open: bool
                 <dl className="mt-3 grid grid-cols-2 gap-y-1 font-mono text-xs">
                   <dt className="text-muted-foreground">anomaly score</dt><dd>{inf.anomaly_score}</dd>
                   {Object.entries(e.frame.features).map(([k, v]) => (
-                    <><dt key={k} className="text-muted-foreground">{k}</dt><dd key={k + "v"}>{e.dataMissing && inf.missing_features.includes(k) ? "null" : v}</dd></>
+                    <Fragment key={k}><dt className="text-muted-foreground">{k}</dt><dd>{e.dataMissing && inf.missing_features.includes(k) ? "null" : v}</dd></Fragment>
                   ))}
                   <dt className="text-muted-foreground">missing</dt><dd>{inf.missing_features.join(", ") || "none"}</dd>
                 </dl>
