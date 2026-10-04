@@ -40,7 +40,7 @@ const round2 = (x: number) => Math.round(x * 100) / 100;
 
 function dot(a: readonly number[], b: readonly number[]) {
   let s = 0;
-  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
+  for (let i = 0; i < a.length; i++) s += (a[i] ?? 0) * (b[i] ?? 0);
   return s;
 }
 
@@ -54,9 +54,9 @@ export function inferLocal(input: SmallAIInput): SmallAIInference {
 
   // PCA projection + reconstruction.
   const latent = m.components.map((row) => dot(row, z));
-  const recon = m.feature_order.map((_, j) => m.components.reduce((s, row, i) => s + row[j] * latent[i], 0));
+  const recon = m.feature_order.map((_, j) => m.components.reduce((s, row, i) => s + (row[j] ?? 0) * (latent[i] ?? 0), 0));
 
-  const reconError = z.reduce((s, v, i) => s + (v - recon[i]) ** 2, 0) / z.length;
+  const reconError = z.reduce((s, v, i) => s + (v - (recon[i] ?? 0)) ** 2, 0) / z.length;
   const zDistance = z.reduce((s, v) => s + v * v, 0) / z.length;
 
   const reconSignal = sigmoid((reconError - m.reconstruction_threshold) / Math.max(m.reconstruction_scale, 0.05));
